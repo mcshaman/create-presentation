@@ -1,0 +1,11 @@
+{
+	"name": "create-presentation",
+	"version": "1.0.0",
+	"description": "Start a presentation project from range of templates",
+	"main": "index.js",
+	"author": "McShaman",
+	"license": "ISC",
+	"dependencies": {
+		"mustache": "^4.0.1"
+	}
+}
