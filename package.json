@@ -5,6 +5,13 @@
 	"main": "index.js",
 	"author": "McShaman",
 	"license": "ISC",
+	"engines": {
+		"node": ">=13.11.0"
+	},
+	"os": [
+		"darwin",
+		"linux"
+	],
 	"dependencies": {
 		"mustache": "^4.0.1"
 	}

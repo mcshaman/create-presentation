@@ -40,7 +40,6 @@ const main = async (pSource, pDest, pView) => {
 	}
 }
 
-// TODO add node version verification
 main(templatePath, dest, {})
 	.catch((pError) => {
 		console.error(pError.toString())
