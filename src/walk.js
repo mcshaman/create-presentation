@@ -1,10 +1,22 @@
-const fs = require("fs")
-const path = require("path")
+const fs = require('fs')
+const path = require('path')
 
-export async function* walk(dir) {
-	for await (const d of await fs.promises.opendir(dir)) {
-		const entry = path.join(dir, d.name)
-		if (d.isDirectory()) yield* walk(entry)
-		else if (d.isFile()) yield entry
+module.exports = async function* walk(pDirPath) {
+	const dir = await fs.promises.opendir(pDirPath)
+
+	for await (const pEntry of dir) {
+		const itemPath = path.join(pDirPath, pEntry.name)
+		if (pEntry.isDirectory()) {
+			yield {
+				isDir: true,
+				path: itemPath,
+			}
+			yield* walk(itemPath)
+		} else if (pEntry.isFile()) {
+			yield {
+				isDir: false,
+				path: itemPath,
+			}
+		}
 	}
 }
