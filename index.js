@@ -1,46 +1,20 @@
 #!/usr/bin/env node
 const path = require('path')
-const fs = require('fs')
-const walk = require('./src/walk')
-const Mustache = require('mustache')
+const getDirNames = require('./src/getDirNames')
+const interactive = require('./src/interactive')
+const main = require('./src/main')
 
-const [template, dest] = process.argv.slice(2)
-const templatePath = path.join('templates', template)
+const TEMPLATES_PATH = 'templates'
 
-const main = async (pSource, pDest, pView) => {
+;(async () => {
+	const templatesPath = path.resolve(__dirname, TEMPLATES_PATH)
 	try {
-		await fs.promises.mkdir(pDest)
+		const templateNames = await getDirNames(templatesPath)
+		const { template, ...settings } = await interactive(templateNames)
+		const templatePath = path.resolve(templatesPath, template)
+		const dest = process.argv[2] || path.join(process.cwd(), settings.projectTitle)
+		await main(templatePath, dest, settings)
 	} catch (pError) {
-		const { code } = pError
-		if (code === 'EEXIST') {
-			throw new Error(`file already exists ${pDest}`)
-		}
-		if (code === 'EACCES') {
-			throw new Error(`permission denied creating dir in ${pDest}`)
-		}
-
-		throw pError
-	}
-
-	try {
-		for await (const { isDir, path: filePath } of walk(pSource)) {
-			const destPath = filePath.replace(pSource, pDest)
-
-			if (isDir) {
-				await fs.promises.mkdir(destPath)
-			} else {
-				const sourceHandle = await fs.promises.open(filePath)
-				const sourceContents = await sourceHandle.readFile()
-				await sourceHandle.close()
-				await fs.promises.writeFile(destPath, Mustache.render(sourceContents.toString(), pView))
-			}
-		}
-	} catch (pError) {
-		throw new Error(`no such template ${template}`)
-	}
-}
-
-main(templatePath, dest, {})
-	.catch((pError) => {
 		console.error(pError.toString())
-	})
+	}
+})()
