@@ -1,7 +1,7 @@
 const fs = require('fs')
 const walk = require('./walk')
 const Mustache = require('mustache')
-const { isBinaryFile } = require('isBinaryFile')
+const { isBinaryFile } = require('isbinaryfile')
 
 module.exports = async (pSource, pDest, pView) => {
 	try {
