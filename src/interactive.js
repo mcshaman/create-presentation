@@ -1,7 +1,7 @@
 const inquirer = require('inquirer')
 const dashify = require('dashify')
 
-module.exports = async pTemplates => {
+module.exports = async (pTemplates, pFeatures) => {
 	try {
 		const answers = await inquirer.prompt([
 			{
@@ -14,6 +14,12 @@ module.exports = async pTemplates => {
 				name: 'template',
 				message: 'Which template?',
 				choices: pTemplates,
+			},
+			{
+				type: 'checkbox',
+				name: 'features',
+				message: 'Which features?',
+				choices: pFeatures,
 			},
 		])
 

@@ -19,6 +19,7 @@
 		"dashify": "^2.0.0",
 		"inquirer": "^7.1.0",
 		"isbinaryfile": "^4.0.6",
+		"lodash": "^4.17.15",
 		"mustache": "^4.0.1"
 	}
 }
