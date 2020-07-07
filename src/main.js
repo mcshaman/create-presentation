@@ -1,6 +1,7 @@
 const fs = require('fs')
 const walk = require('./walk')
 const Mustache = require('mustache')
+const { isBinaryFile } = require('isBinaryFile')
 
 module.exports = async (pSource, pDest, pView) => {
 	try {
@@ -27,10 +28,11 @@ module.exports = async (pSource, pDest, pView) => {
 				const sourceHandle = await fs.promises.open(filePath)
 				const sourceContents = await sourceHandle.readFile()
 				await sourceHandle.close()
-				await fs.promises.writeFile(destPath, Mustache.render(sourceContents.toString(), pView))
+				const destContents = await isBinaryFile(sourceContents) ? sourceContents : Mustache.render(sourceContents.toString(), pView, {}, ['<%', '%>'])
+				await fs.promises.writeFile(destPath, destContents)
 			}
 		}
 	} catch (pError) {
-		throw new Error(`no such template ${template}`)
+		throw new Error(`no such template ${pSource}`)
 	}
 }

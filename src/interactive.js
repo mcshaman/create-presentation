@@ -8,7 +8,6 @@ module.exports = async pTemplates => {
 				type: 'input',
 				name: 'projectTitle',
 				message: 'What\'s the title of your project?',
-				choices: pTemplates,
 			},
 			{
 				type: 'list',
